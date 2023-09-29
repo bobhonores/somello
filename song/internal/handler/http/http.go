@@ -6,21 +6,21 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/bobhonores/somello/track/internal/controller/track"
+	song "github.com/bobhonores/somello/song/internal/controller/song"
 )
 
 type Handler struct {
-	ctrl *track.Controller
+	ctrl *song.Controller
 }
 
-func New(ctrl *track.Controller) *Handler {
+func New(ctrl *song.Controller) *Handler {
 	return &Handler{}
 }
 
-func (h *Handler) GetTrackDetails(w http.ResponseWriter, req *http.Request) {
+func (h *Handler) GetSongDetails(w http.ResponseWriter, req *http.Request) {
 	id := req.FormValue("id")
 	details, err := h.ctrl.Get(req.Context(), id)
-	if err != nil && errors.Is(err, track.ErrNotFound) {
+	if err != nil && errors.Is(err, song.ErrNotFound) {
 		w.WriteHeader(http.StatusNotFound)
 		return
 	} else if err != nil {

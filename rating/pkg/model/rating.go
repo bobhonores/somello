@@ -9,7 +9,7 @@ type RecordID string
 type RecordType string
 
 const (
-	RecordTypeMovie = RecordType("movie")
+	RecordTypeSong = RecordType("song")
 )
 
 // UserID defines a user id

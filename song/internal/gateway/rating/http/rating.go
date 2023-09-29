@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	"github.com/bobhonores/somello/rating/pkg/model"
-	"github.com/bobhonores/somello/track/internal/gateway"
+	"github.com/bobhonores/somello/song/internal/gateway"
 )
 
 type Gateway struct {

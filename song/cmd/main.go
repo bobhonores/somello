@@ -4,10 +4,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/bobhonores/somello/track/internal/controller/track"
-	metadatagateway "github.com/bobhonores/somello/track/internal/gateway/metadata/http"
-	ratinggateway "github.com/bobhonores/somello/track/internal/gateway/rating/http"
-	httphandler "github.com/bobhonores/somello/track/internal/handler/http"
+	track "github.com/bobhonores/somello/song/internal/controller/song"
+	metadatagateway "github.com/bobhonores/somello/song/internal/gateway/metadata/http"
+	ratinggateway "github.com/bobhonores/somello/song/internal/gateway/rating/http"
+	httphandler "github.com/bobhonores/somello/song/internal/handler/http"
 )
 
 func main() {
@@ -16,7 +16,7 @@ func main() {
 	ratingGateway := ratinggateway.New("localhost:8082")
 	ctrl := track.New(ratingGateway, metadataGateway)
 	h := httphandler.New(ctrl)
-	http.Handle("/track", http.HandlerFunc(h.GetTrackDetails))
+	http.Handle("/track", http.HandlerFunc(h.GetSongDetails))
 	if err := http.ListenAndServe(":8083", nil); err != nil {
 		panic(err)
 	}

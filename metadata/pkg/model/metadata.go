@@ -1,6 +1,6 @@
 package model
 
-// Metadata definess the song metadata
+// Metadata defines the song metadata
 type Metadata struct {
 	ID     string `json:"id"`
 	Title  string `json:"title"`

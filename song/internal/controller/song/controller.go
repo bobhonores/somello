@@ -6,11 +6,11 @@ import (
 
 	metadatamodel "github.com/bobhonores/somello/metadata/pkg/model"
 	ratingmodel "github.com/bobhonores/somello/rating/pkg/model"
-	"github.com/bobhonores/somello/track/internal/gateway"
-	"github.com/bobhonores/somello/track/pkg/model"
+	"github.com/bobhonores/somello/song/internal/gateway"
+	"github.com/bobhonores/somello/song/pkg/model"
 )
 
-var ErrNotFound = errors.New("track metadata not found")
+var ErrNotFound = errors.New("song metadata not found")
 
 type ratingGateway interface {
 	GetAggregatedRating(ctx context.Context, recordID ratingmodel.RecordID, recordType ratingmodel.RecordType) (float64, error)
@@ -30,7 +30,7 @@ func New(ratingGateway ratingGateway, metametadataGateway metadataGateway) *Cont
 	return &Controller{ratingGateway, metametadataGateway}
 }
 
-func (c *Controller) Get(ctx context.Context, id string) (*model.TrackDetails, error) {
+func (c *Controller) Get(ctx context.Context, id string) (*model.SongDetails, error) {
 	metadata, err := c.metadataGateway.Get(ctx, id)
 	if err != nil && errors.Is(err, gateway.ErrNotFound) {
 		return nil, ErrNotFound
@@ -38,8 +38,8 @@ func (c *Controller) Get(ctx context.Context, id string) (*model.TrackDetails, e
 		return nil, err
 	}
 
-	details := &model.TrackDetails{Metadata: *metadata}
-	rating, err := c.ratingGateway.GetAggregatedRating(ctx, ratingmodel.RecordID(id), ratingmodel.RecordTypeMovie)
+	details := &model.SongDetails{Metadata: *metadata}
+	rating, err := c.ratingGateway.GetAggregatedRating(ctx, ratingmodel.RecordID(id), ratingmodel.RecordTypeSong)
 	if err != nil && !errors.Is(err, gateway.ErrNotFound) {
 		// Just proceed in this case, it's ok not to have ratings yet.
 	} else if err != nil {
