@@ -26,8 +26,8 @@ type Controller struct {
 	metadataGateway metadataGateway
 }
 
-func New(ratingGateway ratingGateway, metametadataGateway metadataGateway) *Controller {
-	return &Controller{ratingGateway, metametadataGateway}
+func New(ratingGateway ratingGateway, metadataGateway metadataGateway) *Controller {
+	return &Controller{ratingGateway, metadataGateway}
 }
 
 func (c *Controller) Get(ctx context.Context, id string) (*model.SongDetails, error) {

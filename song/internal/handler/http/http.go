@@ -14,7 +14,7 @@ type Handler struct {
 }
 
 func New(ctrl *song.Controller) *Handler {
-	return &Handler{}
+	return &Handler{ctrl}
 }
 
 func (h *Handler) GetSongDetails(w http.ResponseWriter, req *http.Request) {
