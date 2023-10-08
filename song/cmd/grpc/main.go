@@ -9,22 +9,23 @@ import (
 	"time"
 
 	"github.com/bobhonores/somello/gen"
-	"github.com/bobhonores/somello/metadata/internal/controller/metadata"
-	grpchandler "github.com/bobhonores/somello/metadata/internal/handler/grpc"
-	"github.com/bobhonores/somello/metadata/internal/repository/memory"
 	"github.com/bobhonores/somello/pkg/discovery"
 	"github.com/bobhonores/somello/pkg/discovery/consul"
+	song "github.com/bobhonores/somello/song/internal/controller/song"
+	metadatagateway "github.com/bobhonores/somello/song/internal/gateway/metadata/grpc"
+	ratinggateway "github.com/bobhonores/somello/song/internal/gateway/rating/grpc"
+	grpchandler "github.com/bobhonores/somello/song/internal/handler/grpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
 
-const serviceName = "metadata"
+const serviceName = "song"
 
 func main() {
 	var port int
-	flag.IntVar(&port, "port", 8081, "API handler port")
+	flag.IntVar(&port, "port", 8083, "API handler port")
 	flag.Parse()
-	log.Printf("Starting the metadata service on port %d", port)
+	log.Printf("Starting the song service on port %d", port)
 	registry, err := consul.NewRegistry("localhost:8500")
 	if err != nil {
 		panic(err)
@@ -43,16 +44,18 @@ func main() {
 		}
 	}()
 	defer registry.Deregister(ctx, instanceID, serviceName)
-	repo := memory.New()
-	ctrl := metadata.New(repo)
+
+	metadataGateway := metadatagateway.New(registry)
+	ratingGateway := ratinggateway.New(registry)
+	ctrl := song.New(ratingGateway, metadataGateway)
 	h := grpchandler.New(ctrl)
-	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%v", port))
+	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", port))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	srv := grpc.NewServer()
 	reflection.Register(srv)
-	gen.RegisterMetadataServiceServer(srv, h)
+	gen.RegisterSongServiceServer(srv, h)
 	if err := srv.Serve(lis); err != nil {
 		panic(err)
 	}

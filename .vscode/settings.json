@@ -2,8 +2,11 @@
   "cSpell.words": [
     "bobhonores",
     "grpchandler",
+    "grpcutil",
     "httphandler",
+    "metadatagateway",
     "metadatamodel",
+    "ratinggateway",
     "ratingmodel",
     "somello"
   ]
