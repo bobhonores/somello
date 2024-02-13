@@ -4,10 +4,12 @@
     "grpchandler",
     "grpcutil",
     "httphandler",
+    "ingester",
     "metadatagateway",
     "metadatamodel",
     "ratinggateway",
     "ratingmodel",
+    "ratingsdata",
     "somello"
   ]
 }
